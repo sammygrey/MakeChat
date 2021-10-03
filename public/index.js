@@ -3,8 +3,17 @@ $(document).ready(() => {
   const socket = io.connect();
   let currentUser;
   socket.emit("get online users");
+  socket.emit("get channels");
   //Each user should be in the general channel by default.
   socket.emit("user changed channel", "General");
+
+  socket.on("get channels", (channels) => {
+    $(".channel").remove(".channel");
+    $(".channel-current").remove(".channel-current");
+    channels.forEach((channel) => {
+      $(".channels").append(`<div class="channel">${channel}</div>`);
+    });
+  });
 
   //Users can change the channel by clicking on its name.
   $(document).on("click", ".channel", (e) => {
